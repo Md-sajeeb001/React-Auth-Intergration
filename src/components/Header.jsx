@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Providers/AuthProviders";
 
 const Header = () => {
   const links = (
@@ -8,6 +10,9 @@ const Header = () => {
       <Link to="/login">Login</Link>
     </>
   );
+
+  const {name} = useContext(AuthContext);
+  console.log(name)
 
   return (
     <div className="navbar bg-base-100 border-b h-24">
@@ -36,7 +41,7 @@ const Header = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <a className="btn btn-ghost text-xl">{name}</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-8 text-sm">{links}</ul>
