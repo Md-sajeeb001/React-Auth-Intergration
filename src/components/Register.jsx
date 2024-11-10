@@ -1,11 +1,18 @@
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProviders";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
+  const [success, setSuccess] = useState(false);
+  const [showError, setShowError] = useState("");
 
   const handelRegisterSubmit = (e) => {
     e.preventDefault();
+
+    setShowError('')
+    setSuccess(false)
 
     const name = e.target.name.value;
     const email = e.target.email.value;
@@ -15,9 +22,11 @@ const Register = () => {
     createUser(email, password)
       .then((res) => {
         console.log(res);
+        setSuccess(true)
       })
       .catch((error) => {
         console.log("ERROR", error.message);
+        setShowError(error.message)
       });
   };
 
@@ -68,6 +77,11 @@ const Register = () => {
                 <button className="btn btn-primary">Register</button>
               </div>
             </form>
+            <p className="text-center">
+              already have an account <Link to="/login">Log in</Link>
+            </p>
+            {success && <p className="text-green-500">sucessfully log in</p>}
+            {showError && <p className="text-red-500">{showError}</p>}
           </div>
         </div>
       </div>

@@ -3,16 +3,31 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProviders";
 
 const Header = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+
   const links = (
     <>
       <Link to="/">Home</Link>
       <Link to="/register">Register</Link>
       <Link to="/login">Login</Link>
+
+      {
+      user && <Link to="/orders">Orders</Link>
+      }
     </>
   );
 
-  const {name} = useContext(AuthContext);
-  console.log(name)
+  console.log(user);
+
+  const handelSingOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("user signOut Successfully");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
 
   return (
     <div className="navbar bg-base-100 border-b h-24">
@@ -41,13 +56,24 @@ const Header = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">{name}</a>
+        <a className="btn btn-ghost text-xl">{user?.email}</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-8 text-sm">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <>
+            <span>{user.email}</span>
+            <Link onClick={handelSingOut} className="btn">
+              Sing Out
+            </Link>
+          </>
+        ) : (
+          <Link className="btn" to="/login">
+            Log in
+          </Link>
+        )}
       </div>
     </div>
   );
